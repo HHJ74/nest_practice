@@ -6,25 +6,22 @@ import * as dotenv from 'dotenv';
 import { BldgModule } from './bldg/bldg.module';
 
 dotenv.config(); // .env 파일 로드
+const isCloudRun = process.env.USE_CLOUDSQL_SOCKET === 'true';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: "postgres",
-      host: `/cloudsql/${process.env.CLOUDSQL_INSTANCE_CONNECTION_NAME}`,
-      port: parseInt('5432'), // 기본값 설정
+      type: 'postgres',
+      host: isCloudRun
+        ? `/cloudsql/${process.env.CLOUDSQL_INSTANCE_CONNECTION_NAME}` // ✅ Cloud Run 환경
+        : process.env.CLOUDSQL_HOST, // ✅ 로컬 & Docker 환경
+      port: isCloudRun ? undefined : parseInt(process.env.CLOUDSQL_PORT || '5432'),
       username: process.env.CLOUDSQL_USER,
       password: process.env.CLOUDSQL_PASS,
       database: process.env.CLOUDSQL_DB,
-
-      // host: process.env.DB_HOST,
-      // port: parseInt(process.env.DB_PORT || '5432', 10), // 기본값 설정
-      // username: process.env.DB_USERNAME,
-      // password: process.env.DB_PASSWORD,
-      // database: process.env.DB_NAME,
-      extra: {
-        socketPath: `/cloudsql/${process.env.CLOUDSQL_INSTANCE_CONNECTION_NAME}`, // Cloud SQL 소켓 경로
-      },
+      extra: isCloudRun
+        ? { socketPath: `/cloudsql/${process.env.CLOUDSQL_INSTANCE_CONNECTION_NAME}` } // ✅ Cloud SQL 소켓 설정
+        : {},
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: false, //True는 개발모드에서만
     }),
