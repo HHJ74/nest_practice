@@ -11,7 +11,7 @@ dotenv.config(); // .env 파일 로드
   imports: [
     TypeOrmModule.forRoot({
       type: "postgres",
-      host: process.env.CLOUDSQL_HOST,
+      host: `/cloudsql/${process.env.CLOUDSQL_INSTANCE_CONNECTION_NAME}`,
       port: parseInt('5432'), // 기본값 설정
       username: process.env.CLOUDSQL_USER,
       password: process.env.CLOUDSQL_PASS,
@@ -22,6 +22,9 @@ dotenv.config(); // .env 파일 로드
       // username: process.env.DB_USERNAME,
       // password: process.env.DB_PASSWORD,
       // database: process.env.DB_NAME,
+      extra: {
+        socketPath: `/cloudsql/${process.env.CLOUDSQL_INSTANCE_CONNECTION_NAME}`, // Cloud SQL 소켓 경로
+      },
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: false, //True는 개발모드에서만
     }),
