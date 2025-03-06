@@ -17,8 +17,6 @@ dotenv.config(); // .env 파일 로드
       password: process.env.CLOUDSQL_PASS,
       database: process.env.CLOUDSQL_DB,
 
-
-      // type: process.env.DB_TYPE as any, // 타입 변환 필요
       // host: process.env.DB_HOST,
       // port: parseInt(process.env.DB_PORT || '5432', 10), // 기본값 설정
       // username: process.env.DB_USERNAME,
