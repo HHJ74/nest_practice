@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
+import { BldgModule } from './bldg/bldg.module';
 
 dotenv.config(); // .env 파일 로드
 
@@ -17,7 +18,8 @@ dotenv.config(); // .env 파일 로드
       database: process.env.DB_NAME,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: false, //True는 개발모드에서만
-    })
+    }),
+    BldgModule,
   ],
   controllers: [AppController],
   providers: [AppService],
