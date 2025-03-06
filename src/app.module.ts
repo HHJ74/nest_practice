@@ -12,7 +12,7 @@ dotenv.config(); // .env 파일 로드
     TypeOrmModule.forRoot({
       type: "postgres",
       host: process.env.CLOUDSQL_HOST,
-      port: parseInt(process.env.CLOUDSQL_PORT || '5432', 10), // 기본값 설정
+      port: parseInt('5432'), // 기본값 설정
       username: process.env.CLOUDSQL_USER,
       password: process.env.CLOUDSQL_PASS,
       database: process.env.CLOUDSQL_DB,
